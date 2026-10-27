@@ -1,7 +1,7 @@
 pipeline {
 agent any
 
-```
+
 stages {
     stage('Git Checkout') {
         steps {
@@ -18,13 +18,18 @@ stages {
 
     stage('Push to Docker Hub') {
         steps {
-            withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+            withCredentials([usernamePassword(
+                credentialsId: 'dockerhub-credentials',
+                usernameVariable: 'USER',
+                passwordVariable: 'PASS'
+            )]) {
                 sh 'echo "$PASS" | docker login -u "$USER" --password-stdin'
                 sh 'docker push manasvarshney/webapp:latest'
+                sh 'docker logout'
             }
         }
     }
 }
-```
+
 
 }
